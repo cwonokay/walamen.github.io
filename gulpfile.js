@@ -9,7 +9,20 @@ gulp.task('sass', function(){
   .pipe(gulp.dest("src/css")) //we are telling it where to compile the sass files too they will get turned into css files and this is were we want them to go (this will create the css folder for us)
   .pipe(browserSync.stream());
 });
-
+gulp.task('browserSync', () => {
+        browserSync.init({
+            server: {
+                baseDir: task.dir.base,
+                middleware: [
+                    webpackDevMiddleware(bundler, {
+                        publicPath: webpackConfig.output.publicPath,
+                        stats: 'errors-only'
+                    })
+                  ]
+            },
+            browser: 'chrome'
+        });
+    });
 //Move JS Files to src/js
 gulp.task('js', function(){
   return gulp.src(['node_modules/bootstrap/dist/js/bootstrap.min.js', 'node_modules/jquery/dist/jquery.min.js', 'node_modules/popper.js/dist/umd/popper.min.js']) //js files we want to bring to our src folder
